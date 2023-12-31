@@ -1,6 +1,6 @@
 const express=require("express")
 const cookieParser=require("cookie-parser")
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors=require("cors")
 require('dotenv').config()
 const port=process.env.port || 5000
@@ -33,6 +33,9 @@ app.get("/", async(req,res)=>{
     res.send(`this server is running on ${port} port`)
 })
 
+
+
+// ...............Authors.................
 // get authors.
 const authorCollections=database.collection("Authors")
 app.get("/authors" ,async(req,res)=>{
@@ -47,7 +50,62 @@ app.post("/post_author",async(req,res)=>{
 })
 
 
-//                   end           .
+
+
+// ...............Catagory of books.................
+// get catagoryes.
+const catagoryCollection=database.collection("Books_category")
+app.get("/catagoryes",async(req,res)=>{
+  const result=await catagoryCollection.find().toArray()
+  res.send(result)
+ 
+})
+// add new catagory.
+app.post("/add_catagory", async(req,res)=>{
+  const data=req.body.newcategory
+  const query={_id:new ObjectId("6582ddf9ea5940c307c0ceb3")}
+  const result=await catagoryCollection.updateOne(query,{$push:{categories:data}})
+  res.send(result)
+}) 
+
+
+
+
+
+
+
+// ..................user.............
+// post a new user.
+const userCollection=database.collection("Users")
+app.post("/post_a_user",async(req,res)=>{
+  const data=req.body
+  const result=await userCollection.insertOne(data)
+  res.send(result)
+})
+
+// get a new user with email.
+app.get("/get_a_user",async(req,res)=>{
+  const data=req.query.email
+  const query={_id:new ObjectId(data)}
+  const result=await userCollection.findOne(query)
+  res.send(result)
+})
+// get all user.
+app.get("/get_all_user",async(req,res)=>{
+  const result=await userCollection.find().toArray()
+  res.send(result)
+})
+
+
+
+
+
+
+
+
+
+
+///////////////////////////end////////////////////////////////
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
