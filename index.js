@@ -86,7 +86,7 @@ app.post("/post_a_user",async(req,res)=>{
 // get a new user with email.
 app.get("/get_a_user",async(req,res)=>{
   const data=req.query.email
-  const query={_id:new ObjectId(data)}
+  const query={email:data}
   const result=await userCollection.findOne(query)
   res.send(result)
 })
@@ -98,6 +98,64 @@ app.get("/get_all_user",async(req,res)=>{
 
 
 
+
+//...................class.......................
+// get all class name.
+const classCollection=catagoryCollection
+app.get("/get_classe",async(req,res)=>{
+const query={_id:new ObjectId("65929a580677d4b83128b2be")}
+const result=await classCollection.findOne(query)
+res.send(result)
+})
+
+
+//...................class.......................
+// get all class name.
+const subjectcollection=catagoryCollection
+app.get("/get_subjects",async(req,res)=>{
+const query={_id:new ObjectId("6592a3470677d4b831394dbe")}
+const result=await subjectcollection.findOne(query)
+res.send(result)
+})
+
+
+// ...................books.........................
+const bookCollection=database.collection("Books")
+// post a new book.
+app.post("/upload_a_book" ,async(req,res)=>{
+  const data=req.body
+  const result=await bookCollection.insertOne(data)
+  res.send(result)
+})
+// get a book by id
+app.get("/get_a_book",async(req,res)=>{
+  const query={_id:new ObjectId(req.query.id)}
+  const result=await bookCollection.findOne(query)
+  res.send(result)
+})
+// get all books of a user by user eamil.
+app.get("/get_my_all_books", async(req,res)=>{
+  const query={email:req.body.email}
+  const result=await bookCollection.find(query).toArray()
+  res.send(result)
+})
+// get all books
+app.get("/get_all_book",async(req,res)=>{
+  const result=await bookCollection.find().toArray()
+  res.send(result)
+})
+// delete a book
+app.post("/delete_a_book",async(req,res)=>{
+  const query={_id:new ObjectId(req.body.id)}
+  const result=await bookCollection.deleteOne(query)
+  res.send(result)
+})
+// update a book.
+app.patch("/update_a_book",async(req,res)=>{
+  const query={_id:new ObjectId(req.body.id)}
+  const newData={}
+  const result=bookCollection.updateOne()
+})
 
 
 
